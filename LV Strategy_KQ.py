@@ -473,17 +473,6 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # 4-4. 전략 리스트를 details 태그로 묶기
-recent_20_days = df.tail(20)
-high_20d = recent_20_days['Close'].max()
-low_20d = recent_20_days['Close'].min()
-current_price = recent_20_days['Close'].iloc[-1]
-
-price_range = high_20d - low_20d
-if price_range > 0:
-    price_position_percent = ((current_price - low_20d) / price_range) * 100
-else:
-    price_position_percent = 50
-
 strategy_list_html = create_strategy_list_html(recent, prev_day, prev2_day)
 
 combined_info_html = f"""
@@ -492,16 +481,6 @@ combined_info_html = f"""
 📊 전략리스트
 </summary>
 <div style="padding: 12px;">
-    <div style="background-color:#F8F9FA; border-radius:10px; padding:10px 15px; margin-bottom:16px;">
-        <div style="font-size:14px; font-weight:600; margin-bottom:8px; color:#495057;">20일 가격 채널</div>
-        <div style="display:flex; justify-content:space-between; font-size:12px; color:#6C757D; margin-bottom:5px;">
-            <span>20일 저가: {int(low_20d):,}</span>
-            <span>20일 고가: {int(high_20d):,}</span>
-        </div>
-        <div style="position:relative; height:8px; background:#E9ECEF; border-radius:4px;">
-            <div title="현재가: {int(current_price):,}" style="position:absolute; left:{price_position_percent:.1f}%; top:-4px; width:4px; height:16px; background:#343A40; border-radius:2px; transform:translateX(-50%);"></div>
-        </div>
-    </div>
     {strategy_list_html}
 </div>
 </details>
