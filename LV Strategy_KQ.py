@@ -43,20 +43,24 @@ def get_disparity_bar(value, strategy):
     bar_color = get_color(strategy) # 전략에 맞는 색상 사용
     return f"""<div style='width:100%; background:#eee; height:6px; border-radius:3px;'><div style='width:{percent:.1f}%; background:{bar_color}; height:6px; border-radius:3px;'></div></div>"""
 
-def get_condition_badges(volume_cond, low_cond):
+def get_condition_badges(volume_cond, low_cond, is_today=False):
     html_parts = []
     # 뱃지 기본 스타일 정의: 연한 회색 배경, 어두운 글자색, 둥근 모서리 등
     base_badge_style = "background-color:#F0F0F0; color:#303030; padding:2px 6px; border-radius:8px; font-size:12px;"
     
-    if volume_cond:
-        html_parts.append(f"<span style='{base_badge_style} margin-right:4px;'>거래량</span>") # 거래량 조건 충족 시 뱃지 추가
-    if low_cond:
-        html_parts.append(f"<span style='{base_badge_style}'>저가</span>") # 저가 조건 충족 시 뱃지 추가
-    if not volume_cond and not low_cond:
-        # '조건 없음' 뱃지 스타일 (더 밝은 회색 배경, 살짝 옅은 텍스트)
-        inactive_badge_style = "background-color:#FAFAFA; color:#A0A0A0; padding:2px 6px; border-radius:8px; font-size:12px;"
-        inactive_badge_style += " box-shadow: 0 1px 2px rgba(0,0,0,0.05);" # 그림자는 더 연하게
-        html_parts.append(f"<span style='{inactive_badge_style}'>해당없음</span>")
+    # 당일이면 "검토중" 뱃지만 표시
+    if is_today:
+        html_parts.append(f"<span style='{base_badge_style}'>검토중</span>")
+    else:
+        if volume_cond:
+            html_parts.append(f"<span style='{base_badge_style} margin-right:4px;'>거래량</span>") # 거래량 조건 충족 시 뱃지 추가
+        if low_cond:
+            html_parts.append(f"<span style='{base_badge_style}'>저가</span>") # 저가 조건 충족 시 뱃지 추가
+        if not volume_cond and not low_cond:
+            # '조건 없음' 뱃지 스타일 (더 밝은 회색 배경, 살짝 옅은 텍스트)
+            inactive_badge_style = "background-color:#FAFAFA; color:#A0A0A0; padding:2px 6px; border-radius:8px; font-size:12px;"
+            inactive_badge_style += " box-shadow: 0 1px 2px rgba(0,0,0,0.05);" # 그림자는 더 연하게
+            html_parts.append(f"<span style='{inactive_badge_style}'>해당없음</span>")
     
     return "".join(html_parts) # 생성된 뱃지 HTML 문자열들을 합쳐서 반환
 
@@ -113,7 +117,7 @@ def create_strategy_list_html(recent_df, prev_day_df, prev2_day_df):
 
         # 다음 영업일 계산
         strategy_date = next_business_day(row.name)
-    
+
         rows_html += f"""\
         <div style="{card_style}">\
             <div style="display:flex; justify-content:space-between; align-items:center;">\
@@ -122,18 +126,15 @@ def create_strategy_list_html(recent_df, prev_day_df, prev2_day_df):
                 </div>\
                 <div style="background:{get_color(row['판단'])}; color:white; padding:4px 10px; border-radius:12px; font-size:13px;">{row['판단']}</div>\
             </div>\
-            <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top:6px;">\
-                <div style="font-size:18px; font-weight:bold; color:#ffffff;">종가</div>\
-                <div style="font-size:14px; color:#666;">{row['Disparity']:.2f}</div>\
+            <div style="margin-top:6px; height:20px;">\
             </div>\
             <div style="margin-top:6px;">\
-                {get_disparity_bar(row["Disparity"], row["판단"])}\
+                <div style='width:100%; background:{get_color(row['판단'])}; height:6px; border-radius:3px;'></div>\
             </div>\
-            <div style="font-size:14px; color:#999; margin-top:8px;">\
-                {get_condition_badges(float(row["Volume"]) < float(row["Volume_MA3"]), float(row["Low"]) > float(prev_row["Low"]))}\
+            <div style="font-size:14px; color:#999; margin-top:8px; height:20px;">\
             </div>\
         </div>\
-"""
+    """
     return f"<div>{list_header_html}{rows_html}</div>"
 
 # ==============================================================================
