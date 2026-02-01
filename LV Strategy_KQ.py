@@ -83,25 +83,9 @@ def next_business_day(date):
 # ==============================================================================
 def create_strategy_list_html(recent_df, prev_day_df, prev2_day_df):
     
-    # 1. 오버나잇(Overnight) 전략 조건 계산 (기존과 동일)
-    UR = float(prev_day_df["High"]) - float(prev_day_df["Open"])
-    LR_today = float(prev_day_df["Open"]) - float(prev_day_df["Low"])
-    LR_yesterday = float(prev2_day_df["Open"]) - float(prev2_day_df["Low"])
-    is_overnight_condition_met = UR > max(LR_today, LR_yesterday)
-
-    if is_overnight_condition_met:
-        border_and_text_color = "#F9B544" 
-    else:
-        border_and_text_color = "#A0A0A0" 
-    
-    부등호 = ">" if is_overnight_condition_met else "&le;"
-    reason_text = f"UR {UR:.0f} {부등호} LR MAX({LR_today:.0f}, {LR_yesterday:.0f})"
-    badge_style = f"background-color:transparent; color:{border_and_text_color}; font-size:13px; padding:4px 10px; border-radius:15px; border: 1px solid {border_and_text_color};"
-
     list_header_html = f'''
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding: 0 8px;">
         <div style="font-size:18px; font-weight:bold;">전략리스트</div>
-        <span style="{badge_style}">{reason_text}</span>
     </div>
     '''
 
