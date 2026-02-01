@@ -139,7 +139,7 @@ def create_strategy_list_html(recent_df, prev_day_df, prev2_day_df):
                 <div style="background:{get_color(row['판단'])}; color:white; padding:4px 10px; border-radius:12px; font-size:13px;">{row['판단']}</div>\
             </div>\
             <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top:6px;">\
-                <div style="font-size:18px; font-weight:bold;">{int(row['Close']):,}</div>\
+                <div style="font-size:18px; font-weight:bold; color:#ffffff;">종가</div>\
                 <div style="font-size:14px; color:#666;">{row['Disparity']:.2f}</div>\
             </div>\
             <div style="margin-top:6px;">\
