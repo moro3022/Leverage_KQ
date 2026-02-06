@@ -699,7 +699,7 @@ if not df_kosdaq.empty and len(df_kosdaq) >= 2:
         # 이격도 미충족 시 간단한 메시지만 표시
         if not disparity_met:
             kosdaq_html += f"""<div style='background-color: #f8f9fa; border-radius: 10px; padding: 16px; margin-bottom: 12px; border-left: 4px solid #9E9E9E;'>
-                <div style='text-align: center; color: #6c757d; font-size: 14px; padding: 10px 0;'>
+                <div style='text-align: center; color: #6c757d; font-size: 14px; padding: 10px 0; font-weight: 500;'>
                     이격도 요건 미충족
                 </div>
             </div>"""
