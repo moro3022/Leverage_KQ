@@ -304,24 +304,18 @@ else: # 데이터가 충분히 있을 경우에만 실행
     prev_day = df.iloc[-1]   # 메인 출력부에서 사용될 오늘(가장 최신) 데이터
     prev2_day = df.iloc[-2]  # 메인 출력부에서 사용될 어제 데이터
 
-    # 오버나잇 전략 적용 - 첫 번째 블록 (최근 6일)
+    # 오버나잇 전략 적용 - 첫 번째 블록 (기존 로직)
     for i in range(len(recent) - 6, len(recent) - 1):
         if recent.iloc[i]["판단"] == "현금보유":
-            # ✅ 전일(i-1) 판단 확인
-            if i > 0:
-                day_before_decision = recent.iloc[i - 1]["판단"]
-                
-                # ✅ 전일이 레버리지가 아닐 때만 오버나잇 체크
-                if day_before_decision != "레버리지":
-                    today_row = recent.iloc[i + 1]
-                    yesterday_row = recent.iloc[i]
+            today_row = recent.iloc[i + 1]
+            yesterday_row = recent.iloc[i]
 
-                    UR = float(today_row["High"]) - float(today_row["Open"])
-                    LR_today = float(today_row["Open"]) - float(today_row["Low"])
-                    LR_yesterday = float(yesterday_row["Open"]) - float(yesterday_row["Low"])
-                    
-                    if UR > max(LR_today, LR_yesterday):
-                        recent.at[recent.index[i], "판단"] = "오버나잇"
+            UR = float(today_row["High"]) - float(today_row["Open"])
+            LR_today = float(today_row["Open"]) - float(today_row["Low"])
+            LR_yesterday = float(yesterday_row["Open"]) - float(yesterday_row["Low"])
+            
+            if UR > max(LR_today, LR_yesterday):
+                recent.at[recent.index[i], "판단"] = "오버나잇"
 
 # 오버나잇 전략 적용 (기존 '현금보유' 판단에 오버나잇 조건 충족 시 '오버나잇'으로 변경)
     # 🎯 수정: 루프 범위를 `range(1, 6)`으로 변경하고 변수명을 조정했습니다.
