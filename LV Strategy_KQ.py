@@ -335,19 +335,15 @@ else: # 데이터가 충분히 있을 경우에만 실행
                 break
             
             if recent.iloc[i]["판단"] == "현금보유":
+                today_row = recent.iloc[i + 1]
+                yesterday_row = recent.iloc[i]
 
-                day_before_decision = recent.iloc[i - 1]["판단"]
-                
-                if day_before_decision != "레버리지":
-                    today_row = recent.iloc[i + 1]
-                    yesterday_row = recent.iloc[i]
+                UR = float(today_row["High"]) - float(today_row["Open"])
+                LR_today = float(today_row["Open"]) - float(today_row["Low"])
+                LR_yesterday = float(yesterday_row["Open"]) - float(yesterday_row["Low"])
 
-                    UR = float(today_row["High"]) - float(today_row["Open"])
-                    LR_today = float(today_row["Open"]) - float(today_row["Low"])
-                    LR_yesterday = float(yesterday_row["Open"]) - float(yesterday_row["Low"])
-
-                    if UR > max(LR_today, LR_yesterday):
-                        recent.at[recent.index[i], "판단"] = "오버나잇"
+                if UR > max(LR_today, LR_yesterday):
+                    recent.at[recent.index[i], "판단"] = "오버나잇"
 
     # 3-3. 전일/당일 전략 기반 최종 액션(매수/매도) 판단
     prev_decision = recent.iloc[-2]["판단"] # 전일의 최종 전략 판단
