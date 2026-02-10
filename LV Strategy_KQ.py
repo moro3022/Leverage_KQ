@@ -132,13 +132,13 @@ def create_strategy_list_html(recent_df, prev_day_df, prev2_day_df):
         
         if is_most_recent:
             rows_html += f"""\
-                    <div style="margin-top:6px; height:20px;">\
+                    <div style="display:flex; justify-content:flex-end; margin-top:6px; height:20px;">\
+                        <div style="font-size:14px; color:#666;">{row['Disparity']:.2f}</div>\
                     </div>\
                     <div style="margin-top:6px;">\
                         <div style='width:100%; background:{get_color(row['판단'])}; height:6px; border-radius:3px;'></div>\
                     </div>\
-                    <div style="font-size:14px; color:#666; margin-top:8px; height:20px; text-align:right;">\
-                        {row['Disparity']:.2f}\
+                    <div style="font-size:14px; color:#999; margin-top:8px; height:20px;">\
                     </div>\
         """
         else:
