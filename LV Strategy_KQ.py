@@ -118,8 +118,6 @@ def create_strategy_list_html(recent_df, prev_day_df, prev2_day_df):
         # 다음 영업일 계산
         strategy_date = next_business_day(row.name)
 
-        is_most_recent = (i == len(recent_df) - 1)
-
         rows_html += f"""\
         <div style="{card_style}">\
             <div style="display:flex; justify-content:space-between; align-items:center;">\
@@ -128,32 +126,15 @@ def create_strategy_list_html(recent_df, prev_day_df, prev2_day_df):
                 </div>\
                 <div style="background:{get_color(row['판단'])}; color:white; padding:4px 10px; border-radius:12px; font-size:13px;">{row['판단']}</div>\
             </div>\
-"""
-        
-        if is_most_recent:
-            rows_html += f"""\
-                    <div style="display:flex; justify-content:flex-end; margin-top:6px; height:20px;">\
-                        <div style="font-size:14px; color:#666;">{row['Disparity']:.2f}</div>\
-                    </div>\
-                    <div style="margin-top:6px;">\
-                        <div style='width:100%; background:{get_color(row['판단'])}; height:6px; border-radius:3px;'></div>\
-                    </div>\
-                    <div style="font-size:14px; color:#999; margin-top:8px; height:20px;">\
-                    </div>\
-        """
-        else:
-            rows_html += f"""\
-                    <div style="margin-top:6px; height:20px;">\
-                    </div>\
-                    <div style="margin-top:6px;">\
-                        <div style='width:100%; background:{get_color(row['판단'])}; height:6px; border-radius:3px;'></div>\
-                    </div>\
-                    <div style="font-size:14px; color:#999; margin-top:8px; height:20px;">\
-                    </div>\
-        """
-
-        rows_html += """        </div>\
-        """
+            <div style="margin-top:6px; height:20px;">\
+            </div>\
+            <div style="margin-top:6px;">\
+                <div style='width:100%; background:{get_color(row['판단'])}; height:6px; border-radius:3px;'></div>\
+            </div>\
+            <div style="font-size:14px; color:#999; margin-top:8px; height:20px;">\
+            </div>\
+        </div>\
+    """
     return f"<div>{list_header_html}{rows_html}</div>"
 
 # ==============================================================================
