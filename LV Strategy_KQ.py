@@ -361,6 +361,12 @@ else: # 데이터가 충분히 있을 경우에만 실행
     매수액션, 매도액션 = action_map.get((effective_prev_position, effective_today_position), ("없음", "없음"))
     
     # 🎯 추가: 매도가 "레버리지"일 때 전일 이격도에 따라 시가/종가 구분
+    if 매수액션 == "레버리지":
+        if decision == "오버나잇":  # 오버나잇이면 종가 매수
+            매수액션 = "레버리지 종가"
+        else:  # 그 외는 시가 매수
+            매수액션 = "레버리지 시가"
+
     if 매도액션 == "레버리지":
         prev_disparity = float(recent.iloc[-2]["Disparity"])  # 전일 이격도
         if prev_disparity > 106:
@@ -370,7 +376,7 @@ else: # 데이터가 충분히 있을 경우에만 실행
 
     # 3-3-4. 예외 처리: 전일 '레버리지'이고 당일 '오버나잇'일 경우 (포지션 유지 의미)
     if prev_decision == "레버리지" and decision == "오버나잇":
-        매수액션 = "레버리지"
+        매수액션 = "레버리지 종가"
         # 오버나잇의 경우에도 이격도 조건 적용
         prev_disparity = float(recent.iloc[-2]["Disparity"])
         if prev_disparity > 106:
@@ -424,6 +430,13 @@ def get_header_card_display_vars(recent, prev_day, prev2_day, decision, prev_dec
 
         display_매수액션, display_매도액션 = action_map.get((effective_prev_position_alt, effective_today_position_alt), ("없음", "없음"))
         
+        # 🎯 매수액션 표기: 당일이 오버나잇이면 종가, 아니면 시가
+        if display_매수액션 == "레버리지":
+            if display_date_row["판단"] == "오버나잇":  # 당일이 오버나잇이면 종가 매수
+                display_매수액션 = "레버리지 종가"
+            else:  # 그 외는 시가 매수
+                display_매수액션 = "레버리지 시가"
+
         # 매도가 "레버리지"일 때 이격도 조건 적용
         if display_매도액션 == "레버리지":
             alt_prev_disparity = float(display_prev_date_row["Disparity"])
@@ -433,7 +446,7 @@ def get_header_card_display_vars(recent, prev_day, prev2_day, decision, prev_dec
                 display_매도액션 = "레버리지 시가"
 
         if display_prev_date_row["판단"] == "레버리지" and display_date_row["판단"] == "오버나잇":
-            display_매수액션 = "레버리지"
+            display_매수액션 = "레버리지 종가"
             alt_prev_disparity = float(display_prev_date_row["Disparity"])
             if alt_prev_disparity > 106:
                 display_매도액션 = "레버리지 종가"
