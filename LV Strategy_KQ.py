@@ -699,8 +699,8 @@ if not df_kosdaq.empty and len(df_kosdaq) >= 2:
             border_color = "#5BA17B" if all_conditions_met else "#9E9E9E"
             kosdaq_html += f"""<div style='background-color: #f8f9fa; border-radius: 10px; padding: 16px; margin-bottom: 12px; border-left: 4px solid {border_color};'>
                 <div style='display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px;'>
-                    <span style='font-size: 13px; color: #6c757d; font-weight: 500;'>K(S) 매도 기준 스탑로스</span>
-                    <span style='font-size: 20px; font-weight: 700; color: #212529;'>{K_S:,.0f}원</span>
+                    <span style='font-size: 13px; color: #6c757d; font-weight: 500;'>K(S) 매도 기준</span>
+                    <span style='font-size: 20px; font-weight: 700; color: #212529;'>스탑로스 {K_S:,.0f}원</span>
                 </div>
                 <div style='font-size: 12px; color: #868e96; line-height: 1.6; margin-bottom: 10px;'>
                     {'예상 시가' if is_before_market_open else '당일 시가'}: {today_open:,.0f}원<br>
