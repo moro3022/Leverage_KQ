@@ -143,9 +143,9 @@ def create_strategy_list_html(recent_df, prev_day_df, prev2_day_df):
 def calculate_kosdaq_strategy(df_kosdaq, df_leverage):
 
     # 20일 이동평균 및 이격도 계산
-    df_kosdaq["Close_MA20"] = df_kosdaq["Close"].rolling(20).mean().fillna(method='ffill')
+    df_kosdaq["Close_MA20"] = df_kosdaq["Close"].rolling(20).mean().ffill()
     df_kosdaq["Disparity"] = (df_kosdaq["Close"] / df_kosdaq["Close_MA20"]) * 100
-    df_kosdaq.dropna(inplace=True)
+    df_kosdaq = df_kosdaq.dropna()
     
     # 포지션 컬럼 초기화
     df_kosdaq["포지션"] = "현금"
@@ -259,12 +259,12 @@ if df.empty or len(df) < 22: # 최소 20일 이동평균 + 추가 데이터 필�
     st.error("❌ 데이터가 부족하거나 불러오지 못했습니다. 날짜 범위를 확인해 주세요.")
 else: # 데이터가 충분히 있을 경우에만 실행
     # 3일 이동평균 거래량 계산 
-    df["Volume_MA3"] = df["Volume"].rolling(3).mean().fillna(method='ffill')
+    df["Volume_MA3"] = df["Volume"].rolling(3).mean().ffill()
     # 20일 이동평균 종가 계산 
-    df["Close_MA20"] = df["Close"].rolling(20).mean().fillna(method='ffill')
+    df["Close_MA20"] = df["Close"].rolling(20).mean().ffill()
     # 이격도 계산: (현재 종가 / 20일 이동평균 종가) * 100
     df["Disparity"] = (df["Close"] / df["Close_MA20"]) * 100
-    df.dropna(inplace=True) # 모든 계산 후 발생할 수 있는 추가적인 NaN 값 포함 행 제거
+    df = df.dropna() # 모든 계산 후 발생할 수 있는 추가적인 NaN 값 포함 행 제거
 
     # 코스닥150 레버리지 전략 계산
     df_kosdaq = calculate_kosdaq_strategy(df_kosdaq, df_leverage)
